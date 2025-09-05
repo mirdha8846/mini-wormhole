@@ -1,0 +1,489 @@
+{
+  "address": "EpZpzeNFLT1zycUFDQNNdbBMxMYXjrQY6znRRr4ZKpcU",
+  "metadata": {
+    "name": "corm_core",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "initialize",
+      "discriminator": [
+        175,
+        175,
+        109,
+        31,
+        13,
+        152,
+        155,
+        237
+      ],
+      "accounts": [
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  114,
+                  101,
+                  45,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "owner",
+          "type": "pubkey"
+        },
+        {
+          "name": "chain_id",
+          "type": "u16"
+        }
+      ]
+    },
+    {
+      "name": "post_message",
+      "discriminator": [
+        214,
+        50,
+        100,
+        209,
+        38,
+        34,
+        7,
+        76
+      ],
+      "accounts": [
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  114,
+                  101,
+                  45,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "emitter",
+          "docs": [
+            "The emitter (the identity posting). Must sign — if emitter is a PDA, caller must pass it as signer via invoke_signed."
+          ],
+          "signer": true
+        },
+        {
+          "name": "emitter_seq",
+          "docs": [
+            "The emitter sequence account (owned by core) for this emitter.",
+            "Must be the PDA derived with seeds [b\"seq\", emitter.key().as_ref()]."
+          ],
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  113
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "emitter"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "docs": [
+            "System program (if required for internal ops)"
+          ],
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "payload",
+          "type": {
+            "defined": {
+              "name": "Payload"
+            }
+          }
+        },
+        {
+          "name": "nonce",
+          "type": "u64"
+        },
+        {
+          "name": "consistency",
+          "type": "u8"
+        }
+      ]
+    },
+    {
+      "name": "register_emitter",
+      "docs": [
+        "Register an emitter: creates an `EmitterSeq` PDA (owned by core) for the given emitter pubkey.",
+        "Called once per emitter (e.g. by token_lock::initialize via CPI)."
+      ],
+      "discriminator": [
+        217,
+        153,
+        40,
+        34,
+        190,
+        121,
+        144,
+        105
+      ],
+      "accounts": [
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  114,
+                  101,
+                  45,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "emitter",
+          "docs": [
+            "The emitter identity (PDA or user) that will post messages. Must be provided."
+          ]
+        },
+        {
+          "name": "emitter_seq",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  115,
+                  101,
+                  113
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "emitter"
+              }
+            ]
+          }
+        },
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "update_config",
+      "docs": [
+        "Owner can update pause state (only owner)."
+      ],
+      "discriminator": [
+        29,
+        158,
+        252,
+        191,
+        10,
+        83,
+        219,
+        99
+      ],
+      "accounts": [
+        {
+          "name": "config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  99,
+                  111,
+                  114,
+                  101,
+                  45,
+                  99,
+                  111,
+                  110,
+                  102,
+                  105,
+                  103
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "name": "owner",
+          "signer": true,
+          "relations": [
+            "config"
+          ]
+        }
+      ],
+      "args": [
+        {
+          "name": "is_paused",
+          "type": "bool"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Config",
+      "discriminator": [
+        155,
+        12,
+        170,
+        224,
+        30,
+        250,
+        204,
+        130
+      ]
+    },
+    {
+      "name": "EmitterSeq",
+      "discriminator": [
+        174,
+        244,
+        11,
+        146,
+        206,
+        57,
+        117,
+        166
+      ]
+    }
+  ],
+  "events": [
+    {
+      "name": "MessagePosted",
+      "discriminator": [
+        11,
+        28,
+        144,
+        13,
+        232,
+        160,
+        251,
+        5
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "Paused",
+      "msg": "Core is paused, cannot post messages"
+    },
+    {
+      "code": 6001,
+      "name": "EmitterMismatch",
+      "msg": "EmitterSeq emitter mismatch"
+    },
+    {
+      "code": 6002,
+      "name": "Overflow",
+      "msg": "Arithmetic overflow"
+    }
+  ],
+  "types": [
+    {
+      "name": "Config",
+      "docs": [
+        "State structs"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "owner",
+            "type": "pubkey"
+          },
+          {
+            "name": "is_paused",
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          },
+          {
+            "name": "chain_id",
+            "type": "u16"
+          }
+        ]
+      }
+    },
+    {
+      "name": "EmitterSeq",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "emitter",
+            "type": "pubkey"
+          },
+          {
+            "name": "seq",
+            "type": "u64"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "MessagePosted",
+      "docs": [
+        "Events"
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "chain_id",
+            "type": "u16"
+          },
+          {
+            "name": "sequence",
+            "type": "u64"
+          },
+          {
+            "name": "nonce",
+            "type": "u64"
+          },
+          {
+            "name": "consistency",
+            "type": "u8"
+          },
+          {
+            "name": "emitter",
+            "type": "pubkey"
+          },
+          {
+            "name": "timestamp",
+            "type": "i64"
+          },
+          {
+            "name": "payload",
+            "type": {
+              "defined": {
+                "name": "Payload"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Payload",
+      "docs": [
+        "Application-level payload (opaque to core besides being stored/emitted)."
+      ],
+      "repr": {
+        "kind": "c"
+      },
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "action",
+            "type": "u8"
+          },
+          {
+            "name": "sender",
+            "type": "pubkey"
+          },
+          {
+            "name": "receiver",
+            "type": {
+              "array": [
+                "u8",
+                20
+              ]
+            }
+          },
+          {
+            "name": "amount",
+            "type": "u64"
+          },
+          {
+            "name": "nonce",
+            "type": "u64"
+          }
+        ]
+      }
+    }
+  ]
+}
